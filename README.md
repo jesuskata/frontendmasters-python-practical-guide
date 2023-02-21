@@ -128,3 +128,229 @@ my_dict.values()
 my_dict.items()
 # dict_items([('one', 1), ('two', 2), ('three', 3)])
 ```
+
+### Running Python files
+
+- Recuerda que para nombrar variables como para nombrar archivos se hace con `lowercase`  y `snake_case`, además, a diferencia de los nombres de variables que deben ser muy descriptivos, los archivos deben ser de preferencia nombres cortos.
+- Vas a encontrar de repente algunos archivos con extensión `pyc`, no te preocupes, son archivos para optimización, solo no hagas commit de ellos. En caso de que creas que hay algún `pyc` escondido y temes que se haga commit de él, prueba corriendo el siguiente comando `find . --name "*.pyc" --delete`.
+- Para correr un programa de Python, asegúrate de estar en tu ambiente virtual y correr `python <file_name>`.
+- Si quieres ver el resultado de tus programas, vas a tener que usar print para ver lo que deseas que se imprima en la terminal, solo evita hacer esto a nivel producción.
+- Existe una librería dentro de python para imprimir de manera más legible, su nombre es `pretty print` y se usa `import pprint` y en vez de usar `print(...)` vas a usar `pprint(...)`.
+
+### Functions, arguments, scopes
+
+- Las funciones se definen `def my_func_name():`, es importante tener los dos puntos al final de la declaración, y todo lo que va dentro de la función debe ir con espacios para que vaya dentro de su contexto.
+- Es importante considerar dejar un espacio después de terminar tu función, por cuestiones de lectura adecuada del programa.
+- Las funciones deben retornar algo, en caso de que no lo hagas, al leer su tipo, tendrás como respuesta `NoneType`.
+- Una función puede aceptar todos los argumentos que quieras, separados de comas, y esos argumentos serán usados dentro de la función para el propósito que quieres.
+- Si al crear una función decides que uno de los argumentos puede no ir al llamar la función, pero deseas incluir un valor default, lo puedes hacer:
+
+```python
+def my_sum_func(x, y, z=1):
+    return x + y + z
+
+my_sum_func(5, 5)
+# 11 porque z tiene un valor default de 1
+my_sum_func(5, 5, 5)
+# 15
+```
+
+- De acuerdo a lo anterior, entonces tenemos que existe un orden para la definición de una función con argumentos opcionales, primero van los argumentos requeridos y al final los argumentos opcionales.
+- Puedes llamar a la función con los argumentos en desorden, siempre y cuando le digas a Python el valor específico de casa argumento para que pueda hacer la lectura adecuada:
+
+```python
+def my_sum_func(x, y, z=1):
+    return x + y + z
+
+my_sum_func(y=4, z=2, x=10)
+# 16
+```
+
+- No ocupes argumentos mutables como default values en la definición de tu función, ya que no se comportarán de la manera en que probablemente esperas. Ejemplo:
+
+```python
+def do_stuff(list_two=[]):
+    list_two.append("stuff!")
+    return list_two
+
+do_stuff()
+# ['stuff!']
+do_stuff()
+# ['stuff!', 'stuff!']
+do_stuff()
+# ['stuff!', 'stuff!', 'stuff!']
+```
+
+- El scope de cada función le pertenece a cada variable que se defina dentro de la función y no afuera de ella. Ejemplo:
+
+```python
+name = "Alex"
+print(f"Name OUTSIDE the function is: {name}")
+# Name OUTSIDE the function is: Alex
+def try_change_name():
+    name = "Max"
+    print(f"Name INSIDE the function is: {name}")
+    
+try_change_name()
+# Name INSIDE the function is: Max
+name
+# 'Alex'
+```
+
+- Por lo tanto, no trates de querer cambiar una variable que fue definida fuera de la función, porque no será posible, aunque tienes acceso a ella y es muy útil (como usar una variable global `url` por ejemplo), el scope no es el mismo.
+- Una recomendación es que si vas a definir una constante, la definas con `MAYUSCULAS_Y_SEPARADAS_CON_GUION_BAJO`.
+
+### Boolean Logic and Control Statements
+
+- `Thruthiness` evalúa una expresión si es `False` o `True`.
+- Con los tipos `int` los `ceros` son `False` y todos los demás números incluidos los negativos son `True`.
+- Para los otros tipos de valores como `list`, `tuple`, `set` y `dict` todos los contenedores vacíos son `False` y los que tienen al menos un elemento son evaluados como `True`. `None` siempre será `False`.
+- Para hacer una evaluación puedes usar `bool()`, también con una expresión de comparación con `==` o `!=`.
+- Puedes intentar validar si es verdad que dos listas son iguales, pero a continuación se muestra la forma incorrecta y correcta de hacerlo:
+
+```python
+list_one = [1, 2, 3]
+list_two = [1, 2, 3]
+list_one == list_two
+# True
+list_one is list_two # ¿Esta es la manera correcta de validar, porque checa la identidad, osea, esto apunta al mismo lugar en memoria?
+# False
+
+x = None
+x is None
+# True
+[] is None
+# False
+```
+
+- Igualmente se tienen `and`, `or`, `not`. Por ejemplo:
+
+```python
+a = True
+b = True
+a and b
+# True
+True and False
+# False
+True or False
+# True
+True or True
+# True
+False or False
+# False
+a
+# True
+not a
+# False
+True and (True or False)
+# True
+```
+
+- Puedes usar `if` para hacer comparaciones con diferentes expresiones y definir cuando retornar algo o no. Por ejemplo:
+
+```python
+if 3 < 5:
+    print("Hi")
+    
+# Hi
+if 5 < 3:
+    print("Hi")
+    
+a = True
+b = False
+if not b:
+    print("Hi")
+    
+# Hi
+if []:
+    print("Hi")
+    
+if [1, 2]:
+    print("Hi")
+    
+# Hi
+```
+
+- También existe `else` para cuando la condición en el `if` no sea True. Ejemplo:
+
+```python
+if 5 < 3:
+    print("Hi")
+else:
+    print("Bye")
+    
+# Bye
+```
+
+### Loops
+
+- Los `for` loops en Python son simples de leer y escribir, la idea es recorrer un arreglo de valores, creando una variable temporal que será el índice que corresponde como valor: `for temp_value in array:`. Ejemplo:
+
+```python
+colors = ["Red", "White", "Green", "Blue"]
+for color in colors:
+    print(f"The color is: {color}")
+    
+# The color is: Red
+# The color is: White
+# The color is: Green
+# The color is: Blue
+```
+
+- Es importante resaltar, que el valor de `color` sigue existiendo aún fuera del scope del `for loop`, y este tiene el último valor obtenido al recorrer el arreglo.
+- Puedes crear un arreglo con `range()` de la siguiente manera:
+
+```python
+list(range(3))
+# [0, 1, 2]
+list(range(3, 7))
+# [3, 4, 5, 6]
+for number in range(3, 7):
+    print(number)
+    
+# 3
+# 4
+# 5
+# 6
+```
+
+- Puedes también obtener el valor y el índice de un arreglo con `enumerate()` respondiendo con una lista de tuplas de la siguiente forma:
+
+```python
+colors = ['Red', 'White', 'Green', 'Blue']
+list(enumerate(colors))
+# [(0, 'Red'), (1, 'White'), (2, 'Green'), (3, 'Blue')]
+colors
+# ['Red', 'White', 'Green', 'Blue']
+for index, color in enumerate(colors):
+    print(f"{index} color at: {color}")
+    
+# 0 color at: Red
+# 1 color at: White
+# 2 color at: Green
+# 3 color at: Blue
+```
+
+- Si queremos recorrer un `dict` debemos tener presente que por default un `dict` nos va a devolver las keys. Así que necesitamos pedir explícitamente por las keys y values. Por ejemplo:
+
+```python
+hex_colors = {
+    "Red": "#FF0000",
+    "Green": "#008000",
+    "Blue": "#0000FF",
+}
+for hex_color in hex_colors:
+    print(hex_color)
+    
+# Red
+# Green
+# Blue
+hex_colors.items()
+# dict_items([('Red', '#FF0000'), ('Green', '#008000'), ('Blue', '#0000FF')])
+for key, value in hex_colors.items():
+    print(f"{key} is value: {value}")
+    
+# Red is value: #FF0000
+# Green is value: #008000
+# Blue is value: #0000FF
+```
