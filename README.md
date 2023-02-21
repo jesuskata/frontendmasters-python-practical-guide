@@ -367,6 +367,7 @@ for key, value in hex_colors.items():
 - Se puede también incluir condicionales en las `list comprehensions`:
 
 ```python
+names = ['Alex', 'Elo', 'Tiana', 'Aleisa', 'Jana', 'Ester']
 [name for name in names if len(name) % 2 == 0]
 # ['Alex', 'Aleisa', 'Jana'] Me está devolviendo solo los nombres que tienen una longitud par
 ```
