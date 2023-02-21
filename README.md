@@ -354,3 +354,83 @@ for key, value in hex_colors.items():
 # Green is value: #008000
 # Blue is value: #0000FF
 ```
+
+## Practical Applications
+
+### List Comprehensions
+
+- Este es uno de los feature únicos con los que cuenta solo Python, y que incluso por su efectividad, algunos otros lenguajes de programación están comenzando a implementar.
+- Veamos un ejemplo de cómo se ve al tomar una lista de nombres y devolvamos una lista de la longitud de cada nombre [aquí](./list_comps.py):
+
+![ejemplo-img-001](./assets/Screenshot%202023-02-21%20at%2013.15.55.png)
+
+- Se puede también incluir condicionales en las `list comprehensions`:
+
+```python
+[name for name in names if len(name) % 2 == 0]
+# ['Alex', 'Aleisa', 'Jana'] Me está devolviendo solo los nombres que tienen una longitud par
+```
+
+- Una forma práctica de crear una lista de un arreglo de nombres dividido por comas es `split()`:
+
+```python
+names_string = "Alex,Elo,Tiana,Aleisa,Jana,Ester"
+names_string.split(",")
+# ['Alex', 'Elo', 'Tiana', 'Aleisa', 'Jana', 'Ester']
+```
+
+- También puedes pasar de una lista a un string con `join()`:
+
+```python
+names_string = "Alex,Elo,Tiana,Aleisa,Jana,Ester"
+names_list = names_string.split(",")
+" - ".join(names_list)
+# 'Alex - Elo - Tiana - Aleisa - Jana - Ester'
+```
+
+- Se pueden realizar operaciones en una `list comprehension`:
+
+```python
+num_list = [1, 2, 3]
+[num * 2 for num in num_list]
+# [2, 4, 6]
+", ".join([str(num * 2) for num in num_list])
+# '2, 4, 6'
+```
+
+### Generator Expresions
+
+- Parece una `list comprehension`, pero a diferencia de estas, se escribe con paréntesis. Al final, este nos devuelve un tipo `generator`. Veamos un ejemplo:
+
+```python
+# List comprehension
+list_comp = [x ** 2 for x in range(10) if x % 2 == 0]
+list_comp
+# [0, 4, 16, 36, 64]
+type(list_comp)
+# <class 'list'>
+
+# Generator expression
+gen_exp = (x ** 2 for x in range(10) if x % 2 == 0)
+gen_exp
+# <generator object <genexpr> at 0x1017854a0>
+type(gen_exp)
+# <class 'generator'>
+```
+
+- Los generadores no ocupan todo el espacio en memoria del resultado obtenido, puedes recorrer el `generator` como lo hemos venido haciendo, pero, hay una diferencia con un arreglo normal, y es que al no tener el espacio en memoria usado, este después de usarse queda exhausto, o sea, ya no es más útil.
+
+```python
+gen_exp = (x ** 2 for x in range(10) if x % 2 == 0)
+for item in gen_exp:
+    print(item)
+    
+# 0
+# 4
+# 16
+# 36
+# 64
+for item in gen_exp:
+    print(item)
+    
+```
