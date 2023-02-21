@@ -47,3 +47,84 @@ f"Mi edad es de {a} años" # Mi edad es de 37 años
 ```
 
 - Se puede declarar una lista con `[]` o con `list()`
+
+## Functions, Loops and Logic
+
+### Tuples
+
+- Son pequeñas colecciones en las que puedes poner diferentes tipos de items. A diferencia de las listas que son usadas generalmente para contener tipos similares de items, las tuplas no tienen restricciones en esa área.
+- Otra diferencia entre las listas y las tuplas es que las tuplas son `inmutables`.
+- Las listas son creadas con `[]`, pero las tuplas son creadas con `()`.
+- Para que una tupla de un solo elemento sea de tipo tupla, debe cumplir con la condición de tener una coma después del elemento `(1,)`.
+- Se puede hacer una extracción de valores y asignarlos en una variable de la siguiente manera:
+
+```python
+student = ("Jesús", 37, "History", 9.5)
+name, age, subject, gpa = student
+name # Jesús
+age # 37
+subject # History
+gpa # 9.5
+```
+
+- Para lo anterior, se debe cumplir una condición importante, y es que las variables a definir deben cumplir con el número de índices dentro de la tupla.
+- Se puede omitir el uso de alguno de los índices con `_`, por ejemplo, de acuerdo al código de arriba `name, age, subject, _ = student`, con esto el último valor no estará guardado en ninguna variable.
+
+### Sets
+
+- Son tipo mutable y solo te permiten contener tipos inmutables dentro y de manera desordenada.
+- Otra característica es que son rápidos. Por lo mismo que están bien definidos y no contienen: lists, dictionaries, y otros tipos mutables.
+- Para crear set puedes hacerlo con `{}` y con `set()`, pero como nota importante, no puedes crear un set vacío con `{}`, porque Python lo reconocería como un tipo `dict`, para crear un set vacío, lo puedes hacer con la instrucción `set()`.
+- Set puede tener un solo ítem dentro o múltiples.
+- Set no puede contener valores duplicados, por ejemplo si creo una variable `my_set = {3, 3, 4,}`, mi variable al llamarla será `{3, 4}`.
+- Hay un tip para saber qué es mutable y qué no lo es con el método `hash()`:
+
+```python
+hash(5)
+# 5
+hash("Hello")
+# -6361881465459099289
+hash(["Hello"])
+# Traceback (most recent call last):
+#   File "/Applications/PyCharm.app/Contents/plugins/python/helpers/pydev/pydevconsole.py", line 364, in runcode
+#     coro = func()
+#   File "<input>", line 1, in <module>
+# TypeError: unhashable type: 'list'
+```
+
+- Puedes crear un set de un array existente y evitar los duplicados al mismo tiempo. Ejemplo:
+
+```python
+names = ["Aleisa", "Aleisa", "Tiana", "Jana"]
+set(names)
+# {'Jana', 'Tiana', 'Aleisa'}
+```
+
+### Dictionaries
+
+- Es un tipo de dato mutable que nos permite guardar `key` y `value` emparejados.
+- Como se mencionó arriba, son inmutables, pero el dictionary key debe ser inmutable, por qué, porque los `key` de los dictionaries deben ser `hashables`. De esta manera Python se asegura de realizar búsquedas rápidas.
+- Los dictionaries se definen con `{}`, para crear un dict vacío, basta con escribir `{}`, y para crear uno con elementos debe cumplir la regla `{key: value}`.
+- Puedes acceder a los valores del dict con la connotación `my_dict[key]`. Por ejemplo:
+
+```python
+my_dict = {"one": 1, "two": 2}
+my_dict["one"]
+# 1
+```
+
+- Pero no puedes acceder a un valor por "índice" `my_dict[0]`, porque la restricción es que se le indique el `key` para que sea válido.
+- Hay tres métodos muy útiles que se usarán mucho con los dicts:
+
+```python
+my_dict = {"one": 1, "two": 2}
+my_dict["three"] = 3
+my_dict
+# {'one': 1, 'two': 2, 'three': 3}
+my_dict.keys()
+# dict_keys(['one', 'two', 'three'])
+my_dict.values()
+# dict_values([1, 2, 3])
+my_dict.items()
+# dict_items([('one', 1), ('two', 2), ('three', 3)])
+```
