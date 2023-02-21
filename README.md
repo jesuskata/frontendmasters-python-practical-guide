@@ -4,6 +4,17 @@
 * [Frontendmasters: Practical Guide to Python](#frontendmasters--practical-guide-to-python)
   * [Notas](#notas)
   * [Variables and Data Types](#variables-and-data-types)
+  * [Functions, Loops and Logic](#functions-loops-and-logic)
+    * [Tuples](#tuples)
+    * [Sets](#sets)
+    * [Dictionaries](#dictionaries)
+    * [Running Python files](#running-python-files)
+    * [Functions, arguments, scopes](#functions-arguments-scopes)
+    * [Boolean Logic and Control Statements](#boolean-logic-and-control-statements)
+    * [Loops](#loops)
+  * [Practical Applications](#practical-applications)
+    * [List Comprehensions](#list-comprehensions)
+    * [Generator Expresions](#generator-expresions)
 <!-- TOC -->
 
 ## Notas
