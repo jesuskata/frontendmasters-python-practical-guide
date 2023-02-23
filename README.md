@@ -916,4 +916,6 @@ source env/bin/activate
 (env) python manage.py migrate
 
 (env) python manage.py shell
+
+(env) python manage.py createsuperuser
 ```
