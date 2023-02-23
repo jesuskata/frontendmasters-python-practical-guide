@@ -25,6 +25,10 @@
     * [Virtual Environments](#virtual-environments)
     * [Libraries, Modules and Imports](#libraries-modules-and-imports)
     * [External Libraries and Requests Library](#external-libraries-and-requests-library)
+  * [Web Frameworks](#web-frameworks)
+    * [Django](#django)
+    * [Flask](#flask)
+    * [Django Notes](#django-notes)
 <!-- TOC -->
 
 ## Notas
@@ -880,4 +884,36 @@ for url in json_data:
 # 	 https://cdn.shibe.online/shibes/abb716ce888cd2ab54342855ec9c11d604c37b4a.jpg
 # 	 https://cdn.shibe.online/shibes/03c13496ed1a361e835520d29207e72048b50dca.jpg
 # 	 https://cdn.shibe.online/shibes/3b44c4003805679b2427f4093029db1a50fcbd56.jpg
+```
+
+## Web Frameworks
+
+### Django
+
+- Es uno de los `Web Frameworks` que nos ofrece Python y que es un todo en uno, contiene todo lo necesario para crear aplicaciones a gran escala.
+- Es considerado él `Web Framework` para perfeccionistas con los `deadlines`.
+- Dentro de lo que hay `out of the box` en Django: ORM (Object Relational Model) que hace que trabajar con Bases de Datos sea tan simple como trabajar con `Python instances`, incluye un `Admin` que hace fácil manejar tu contenido con formularios y validaciones, también ofrece un `User Authentication`, `Template` de lenguaje, protección contra `Common Security Vulnerabilities` y mucho más.
+
+### Flask
+
+- `Flask` es un `microframework` para Python, que permite a los usuarios crear aplicaciones web y `API` back-end básicas con mucho menos código.
+- `Flask` es más fácil de entender y configurar para los principiantes, y es menos obstinado.
+- El inconveniente es que a medida que desee agregar componentes adicionales a su aplicación, como bases de datos, autenticación y otras capas, deberá usar complementos o paquetes de terceros. `Flask` no los proporciona por default.
+
+### Django Notes
+
+- Para hacer un setup de un proyecto Django, se recomienda seguir la [guía de Django](https://docs.djangoproject.com/en/3.1/intro/tutorial01/)
+
+```commandline
+python3 -m venv env
+source env/bin/activate
+
+(env) python -m pip install -r requirements.txt
+(env) python manage.py migrate
+(env) python manage.py runserver
+
+(env) python manage.py makemigrations blog
+(env) python manage.py migrate
+
+(env) python manage.py shell
 ```
