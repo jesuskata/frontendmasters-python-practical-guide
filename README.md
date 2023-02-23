@@ -673,4 +673,64 @@ class Car(Vehicle):
 
 ### Tracebacks
 
-- Si llegáramos a tener una excepción no detectada `uncaught exception` en nuestro programa, el programa se saldrá rotundamente.
+- Si llegáramos a tener una excepción no detectada `uncaught exception` en nuestro programa, el programa se saldrá rotundamente, y no continuará con su ejecución.
+
+```python
+int("a")
+print("End of the program.")
+# Traceback (most recent call last):
+#   File "/Applications/PyCharm.app/Contents/plugins/python/helpers/pydev/pydevconsole.py", line 364, in runcode
+#     coro = func()
+#   File "<input>", line 2, in <module>
+# ValueError: invalid literal for int() with base 10: 'a'
+```
+
+- Como puedes ver en el ejemplo de arriba, el programa nunca llegó a la línea de `print()`.
+- Para ello, Python cuenta con una forma de cachar excepciones y es con `try` y `except`.
+
+```python
+try:
+    int("a")
+except ValueError:
+    print("Oops, couldn't convert that value into an int!")
+print("Reached end of the program.")
+# Oops, couldn't convert that value into an int!
+# Reached end of the program.
+```
+
+- Siempre debemos pensar en cachar excepciones lo más específicas posibles. Como en el ejemplo de arriba, que aprendió del error lanzado en el primer error: `ValueError: invalid literal for int() with base 10: 'a'`, lo cual ayudó a copiar la clase `ValueError` y con eso se incluyó en la solución.
+- Otra cosa a considerar, es que en `try` y `except` se lanzará el error en el orden en que sea encontrado.
+
+```python
+try:
+    d = {}
+    d["a"]
+    int("a")
+except ValueError:
+    print("Oops, couldn't convert that value into an int!")
+print("Reached end of the program.")
+# Traceback (most recent call last):
+#   File "/Applications/PyCharm.app/Contents/plugins/python/helpers/pydev/pydevconsole.py", line 364, in runcode
+#     coro = func()
+#   File "<input>", line 3, in <module>
+# KeyError: 'a'
+```
+
+- Entonces una solución es incluir las excepciones que sean necesarias:
+
+```python
+try:
+    d = {}
+    d["a"]
+    int("a")
+except ValueError:
+    print("A value exception happened.")
+except KeyError:
+    print("A key wasn't found.")
+print("Reached end of the program.")
+# A key wasn't found.
+# Reached end of the program.
+```
+
+- También existe una cláusula `finally` que puedes incluir como un bloque opcional, el cual correrá después de que el try se haya ejecutado y lanzado o no alguna excepción. Así que si quieres hacer algún tipo de limpieza, ese es el lugar correcto para hacerlo.
+- Como __NOTA IMPORTANTE__ nunca hagas `catch` de `Exeption` y `BaseException`, sobre todo la última, porque estarás exceptuando del programa todas las excepciones, las cuales están incluidas en `BaseException`, incluso no te será posible hacer `CTRL + C` para salir de la ejecución del programa.
