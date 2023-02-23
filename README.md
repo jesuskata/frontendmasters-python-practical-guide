@@ -20,6 +20,11 @@
     * [Methods and Magic Methods](#methods-and-magic-methods)
     * [Inheritance](#inheritance)
     * [Tracebacks](#tracebacks)
+  * [Libraries and Modules](#libraries-and-modules)
+    * [Main Method](#main-method)
+    * [Virtual Environments](#virtual-environments)
+    * [Libraries, Modules and Imports](#libraries-modules-and-imports)
+    * [External Libraries and Requests Library](#external-libraries-and-requests-library)
 <!-- TOC -->
 
 ## Notas
@@ -734,3 +739,145 @@ print("Reached end of the program.")
 
 - También existe una cláusula `finally` que puedes incluir como un bloque opcional, el cual correrá después de que el try se haya ejecutado y lanzado o no alguna excepción. Así que si quieres hacer algún tipo de limpieza, ese es el lugar correcto para hacerlo.
 - Como __NOTA IMPORTANTE__ nunca hagas `catch` de `Exeption` y `BaseException`, sobre todo la última, porque estarás exceptuando del programa todas las excepciones, las cuales están incluidas en `BaseException`, incluso no te será posible hacer `CTRL + C` para salir de la ejecución del programa.
+
+## Libraries and Modules
+
+### Main Method
+
+- El propósito del `main method` es que solamente correrá cuando tu código sea ejecutado como un programa independiente. Lo que quiere decir que puede ser importado en otros proyectos con `import`. Esto es muy útil cuando queremos escribir código reutilizable. Por ejemplo:
+
+```python
+# name_lib.py
+
+def name_length(name):
+    return len(name)
+
+def upper_case_name(name):
+    return name.upper()
+
+def lower_case_name(name):
+    return name.lower()
+
+name = "Nina"
+length = name_length(name)
+upper_case = upper_case_name(name)
+
+print(f"The length is {length} and the uppercase version is: {upper_case}")
+```
+
+```python
+# other_program.py
+
+import name_lib
+
+my_name = "Fred"
+
+my_length = name_lib.name_length(my_name)
+my_lower_case = name_lib.lower_case_name(my_name)
+
+print(f"In my code, my length is {my_length} and my lower case name is: {my_lower_case}")
+# The length is 4 and the uppercase version is: NINA
+# In my code, my length is 4 and my lower case name is: fred
+```
+
+- Este resultado no es esperado, porque en el último programa que estoy corriendo, se está ejecutando `name_lib.py` y el print que hay en `other_program.py`. Para evitar eso, debemos _wrappear_ nuestro programa en un `__main__`.
+
+```python
+# name_lib.py
+
+def name_length(name):
+    return len(name)
+
+
+def upper_case_name(name):
+    return name.upper()
+
+
+def lower_case_name(name):
+    return name.lower()
+
+
+if __name__ == "__main__":
+    name = "Nina"
+    length = name_length(name)
+    upper_case = upper_case_name(name)
+
+    print(f"The length is {length} and the uppercase version is: {upper_case}")
+# *****************************************************************************
+    
+
+# other_program.py
+import name_lib
+
+my_name = "Fred"
+
+my_length = name_lib.name_length(my_name)
+my_lower_case = name_lib.lower_case_name(my_name)
+
+print(f"In my code, my length is {my_length} and my lower case name is: {my_lower_case}")
+# In my code, my length is 4 and my lower case name is: fred
+```
+
+### Virtual Environments
+
+- Los `virtual environments` son muy útiles para almacenar las dependencias que requiere nuestra aplicación Python.
+- La creación de un entorno virtual crea una carpeta independiente que incluye una instalación completa de Python, lo que le permite instalar dependencias específicas de su aplicación (o incluso una versión específica de Python si lo desea) sin depender de la versión del sistema global de Python.
+- Un standard que verás en Python es un archivo llamado `requirements.txt` que está incluido en los proyectos de Python. Es un archivo especial que usaremos para decirle a `pip` (Python Package Manager).
+- Puedes crear manualmente tu archivo agregando cada librería usada en tu proyecto, o puedes crearlo con el comando `pip freeze > requirements.txt` y/o ejecutarlo en un nuevo ambiente donde continuarás tu trabajo con el comando `pip install -r requirements.txt`.
+
+### Libraries, Modules and Imports
+
+- Puedes importar librerías completas solo haciendo `import random` por ejemplo, o puedes importar los métodos que necesites de esa librería, solo los que vayas a usar en tu proyecto con `from random import randint`
+- También puedes instalar librerías con el comando `python -m pip install request`. Lo que hace este comando es asegurarse que `pip` instalará la librería que haga match en la versión de tu environment y no tendrás problemas de tener instaladas versiones que no funcionan para tu proyecto de `Python` y `pip`.
+
+```python
+python -m pip install requests
+# Requirement already satisfied: requests in ./venv/lib/python3.9/site-packages (2.28.2)
+# Requirement already satisfied: certifi>=2017.4.17 in ./venv/lib/python3.9/site-packages (from requests) (2022.12.7)
+# Requirement already satisfied: charset-normalizer<4,>=2 in ./venv/lib/python3.9/site-packages (from requests) (3.0.1)
+# Requirement already satisfied: urllib3<1.27,>=1.21.1 in ./venv/lib/python3.9/site-packages (from requests) (1.26.14)
+# Requirement already satisfied: idna<4,>=2.5 in ./venv/lib/python3.9/site-packages (from requests) (3.4)
+```
+
+### External Libraries and Requests Library
+
+- La página para buscar los proyectos que hay en Python que pueden ayudar a tu proyecto es [pypi](https://pypi.org).
+- Siempre verifica que estás escribiendo correctamente el nombre del package y que brinda la confianza suficiente para poder usarla en tu proyecto.
+- Un buen ejemplo del uso de `requests` lo puedes encontrar al correr el [proyecto-shibe](./shibe.py).
+
+```python
+# Response status code is: 200
+['https://cdn.shibe.online/shibes/7d9fb0f9a54108bcd7ebda070844a1dde925c645.jpg']
+```
+
+- Se pueden agragar parámetros al llamado con `requests`:
+
+```python
+# First thing we'll do is import the requests library
+import requests
+# We'll store our base URL here and pass in the count parameter later
+api_url = "http://shibe.online/api/shibes"
+params = {
+   "count": 10
+}
+# Pass those params in with the request.
+api_response = requests.get(api_url, params=params)
+print(f"Shibe API Response Status Code is: {api_response.status_code}")  # should be 200 OK
+json_data = api_response.json()
+print("Here is a list of URLs for dog pictures:")
+for url in json_data:
+    print(f"\t {url}")
+    
+# Shibe API Response Status Code is: 200
+# Here is a list of URLs for dog pictures:
+# 	 https://cdn.shibe.online/shibes/5e6d5745ba842bf3dfd3c2ede1c756d297724440.jpg
+# 	 https://cdn.shibe.online/shibes/9a32be747f49d93b4549bf249dff6b5c1780f1dd.jpg
+# 	 https://cdn.shibe.online/shibes/889730d5d62179d1ce6911e2f57d57690f2d60fe.jpg
+# 	 https://cdn.shibe.online/shibes/9d349c1deca7da3e177b2a1f2348d88feefac0f2.jpg
+# 	 https://cdn.shibe.online/shibes/28d7c372ea7defdb315ef845285d4ac3906ccea4.jpg
+# 	 https://cdn.shibe.online/shibes/0881d5d0096b596f3958248646c7a0cdec22f8cb.jpg
+# 	 https://cdn.shibe.online/shibes/d9bb81c49c4d6118c26e788852dfa2470089e4f4.jpg
+# 	 https://cdn.shibe.online/shibes/abb716ce888cd2ab54342855ec9c11d604c37b4a.jpg
+# 	 https://cdn.shibe.online/shibes/03c13496ed1a361e835520d29207e72048b50dca.jpg
+# 	 https://cdn.shibe.online/shibes/3b44c4003805679b2427f4093029db1a50fcbd56.jpg
+```
