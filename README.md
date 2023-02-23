@@ -15,6 +15,11 @@
   * [Practical Applications](#practical-applications)
     * [List Comprehensions](#list-comprehensions)
     * [Generator Expresions](#generator-expresions)
+  * [Object Oriented Python](#object-oriented-python)
+    * [Classes vs Inheritance](#classes-vs-inheritance)
+    * [Methods and Magic Methods](#methods-and-magic-methods)
+    * [Inheritance](#inheritance)
+    * [Tracebacks](#tracebacks)
 <!-- TOC -->
 
 ## Notas
@@ -446,3 +451,226 @@ for item in gen_exp:
     print(item)
     
 ```
+
+## Object Oriented Python
+
+### Classes vs Inheritance
+
+- Everything is an object in Python.
+- Classes are not the same with Instances. For example: `43` is an instance of the `class` `int`, and `int` como tal es el `objeto clase`.
+- Puedes pensar en una clase como un tipo de algo, como un `carro`, y en la instancia como algo específico de ese tipo de cosa, como mi carro `Nissan`, que es un tipo de `carro`.
+- Ambos pueden tener en ellos `variables` y/o `métodos`.
+- Cuando cambias una variable de la clase, va a cambiar lo que estás retornando cuando llamas a la instancia de esa clase, pero cuando cambias cosas en una instancia, eso nunca va a afectar a la clase que la contiene.
+- `self` es usado en las clases para referir a abundar o manar una instancia de esa variable u objeto. Por ejemplo:
+
+```python
+class Car:
+    runs = True
+
+    def start(self):
+        if self.runs:
+            print("Car is started. Vroom vroom!")
+        else:
+            print("Car is broken :(")
+
+my_car = Car()
+print(f"My car runs: {my_car.runs}")
+my_car.start()
+# My car runs: True
+# Car is started. Vroom vroom!
+
+my_car.runs = False
+print(f"My car runs: {my_car.runs}")
+my_car.start()
+# My car runs: False
+# Car is broken :(
+
+my_other_car = Car()
+my_other_car.start()
+# Car is started. Vroom vroom!
+```
+
+- Entonces, de acuerdo al ejemplo anterior, también podemos concluir que `self` refiere a una instancia.
+- Todas las variables in estas clases deben poner a `self` como primer argumento.
+- Por ejemplo, si trato de llamar `start()` en la clase `Car()`, en vez de hacerlo por medio de una instancia, recibiremos un error:
+
+```python
+class Car:
+    runs = True
+
+    def start(self):
+        if self.runs:
+            print("Car is started. Vroom vroom!")
+        else:
+            print("Car is broken :(")
+            
+
+Car.start()
+# Traceback (most recent call last):
+#   File "./python-practical-guide/chapter_6.py", line 11, in <module>
+#     Car.start()
+# TypeError: start() missing 1 required positional argument: 'self'
+# 
+# Process finished with exit code 1
+```
+
+- Este error es muy común, y en este caso sucede porque estoy tratando de llamar el método `start()`, el cual es un método instancia, por lo tanto, está esperando una instancia en la misma clase.
+- Por ejemplo si intentas al método correctamente a través de la instancia, pero sin haber agregado `self` en la instancia, tendrás otro error muy común.
+
+```python
+class Car:
+    runs = True
+
+    def start():
+        pass
+        # if self.runs:
+        #     print("Car is started. Vroom vroom!")
+        # else:
+        #     print("Car is broken :(")
+
+
+my_new_car_two = Car()
+my_new_car_two.start()
+
+# Traceback (most recent call last):
+#   File "./python-practical-guide/chapter_6.py", line 13, in <module>
+#     my_new_car_two.start()
+# TypeError: start() takes 0 positional arguments but 1 was given
+# 
+# Process finished with exit code 1
+```
+
+### Methods and Magic Methods
+
+- Las clases también pueden contener clases dentro, lo que hace innecesario incluir el argumento `self` en ellas. Para ello, existe una `Annotation` que podemos incluir por encima de la clase llamada `@classmethod`, para decirle a Python que este método no espera una instancia en él. Por el contrario, el argumento que puede llevar es `cls`, con el que podemos acceder a las variables definidas al inicio de la `class`:
+
+```python
+class Car:
+    runs = True
+    number_of_wheels = 4
+
+    @classmethod
+    def get_number_of_wheels(cls):
+        return cls.number_of_wheels
+
+    def start(self):
+        if self.runs:
+            print("Car is started. Vroom vroom!")
+        else:
+            print("Car is broken :(")
+```
+
+- Hay una forma de descubrir cuando algo es instancia de una clase, como cuando evaluamos el `type`:
+
+```python
+class Car:
+    runs = True
+    number_of_wheels = 4
+
+    @classmethod
+    def get_number_of_wheels(cls):
+        return cls.number_of_wheels
+
+    def start(self):
+        if self.runs:
+            print("Car is started. Vroom vroom!")
+        else:
+            print("Car is broken :(")
+            
+            
+my_car = Car()
+isinstance(42, int)
+# True
+isinstance("Hello world!", str)
+# True
+isinstance(my_car, float)
+# False
+isinstance(my_car, Car)
+# True
+```
+
+- Los `magic methods` son reconocidos por tener doble guion bajo antes y después de su nombre, como es el caso de `__init__`. Eso significa que hay algo especial en estas funciones o métodos.
+- En este caso `dunder init (__init__)`, va a correr en el momento que crees una instancia de esa clase, y debe llevar `self`, además que puedes incluir los argumentos que desees y que van a estar disponibles en la clase para su uso.
+
+```python
+class Car:
+    runs = True
+    def __init__(self, make, model):
+        self.make = make
+        self.model = model
+    def start(self):
+        if self.runs:
+            print(f"Your {self.make} {self.model} is started. Vroom vroom!")
+        else:
+            print(f"Your {self.make} {self.model} is broken :(")
+            
+            
+my_car = Car("Ford", "Thunderbird")
+my_car.start()
+# Your Ford Thunderbird is started. Vroom vroom!
+```
+
+- En el ejemplo de arriba, podemos ver que existen dos argumentos requeridos, que si al crear una instancia de esa clase sin esos argumentos, obtendrás un error. Además, si quiero salvar esos valores para que sean usados después, debo guardarlos en la instancia como se muestra:
+
+```python
+def __init__(self, make, model):
+    self.make = make
+    self.model = model
+```
+
+- Esto significa que una vez guardados de esta forma en la instancia, podré usarlos cuando llame otros métodos.
+- Hay otros `magic methods` como `dunder str (__str__)` y `dunder repr (__repr__)`, los cuales son muy comúnmente usados para hacer debugging. Ambos devuelven un `string`.
+- `__str__` lo puedes ver como una representación de tu objeto que puede ser leído _humanamente_, algo que puedes mostrarle al usuario para hacerle saber lo que representa tu objeto.
+- `__repr__` retorna el código de Python que probablemente sea necesario para reconstruir el objeto. Así que este método es más usado bajo el agua.
+
+```python
+import datetime
+now = datetime.datetime.now()
+str(now)
+# '2023-02-22 18:40:55.154714'
+repr(now)
+# 'datetime.datetime(2023, 2, 22, 18, 40, 55, 154714)'
+```
+
+Otro ejemplo:
+
+```python
+class Car:
+    def __init__(self, make, model):
+        self.make = make
+        self.model = model
+    def __str__(self):
+        return f"<<Car object: {self.make} {self.model}>>"
+    def __repr__(self):
+        return f"Car('{self.make}', '{self.model}')"
+    
+
+my_car = Car("Ford", "Thunderbird")
+print(f"This object is a {str(my_car)}")
+print(f"To reproduce it, type: {repr(my_car)}")
+# This object is a <<Car object: Ford Thunderbird>>
+# To reproduce it, type: Car('Ford', 'Thunderbird')
+```
+
+### Inheritance
+
+- Python tiene herencia y también herencia múltiple.
+- Cuando una clase hereda de otra, debes poner la clase de la que heredarás en el paréntesis, después de la definición de la propia clase.
+- Entonces, cuando llamas `__init__` dentro de la subclase, si quieres correr todo el código de la `superclase`, necesitas entonces llamar explícitamente `super()` y el método que llamarás, junto con todos sus argumentos:
+
+```python
+class Vehicle:
+    def __init__(self, make, model, fuel="gas"):
+        self.make = make
+        self.model = model
+        self.fuel = fuel
+
+
+class Car(Vehicle):
+    def __init__(self, make, model, fuel="gas"):
+        super().__init__(make, model, fuel)
+```
+
+### Tracebacks
+
+- Si llegáramos a tener una excepción no detectada `uncaught exception` en nuestro programa, el programa se saldrá rotundamente.
